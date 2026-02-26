@@ -14,67 +14,119 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            /* Dynamic animated gradient background */
             background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #000000);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             padding: 2rem;
+            overflow: hidden; 
         }
 
         h1 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             text-align: center;
             letter-spacing: 2px;
             text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            animation: fadeInDown 1s ease-out;
+            z-index: 20;
         }
 
-        .container {
+        /* STEERING WHEEL CONTROLS */
+        .controls {
+            margin-bottom: 1.5rem;
             display: flex;
-            gap: 3rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            max-width: 1000px;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20;
         }
 
-        .section {
-            /* Glassmorphism card effect */
+        .steering-btn {
+            background: radial-gradient(circle, #333333 30%, #111111 100%);
+            border: 5px solid #666;
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: inset 0 0 15px #000000, 0 10px 25px rgba(0, 0, 0, 0.7);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .steering-btn:hover {
+            box-shadow: inset 0 0 20px #000000, 0 15px 35px rgba(0, 242, 254, 0.3);
+            border-color: #888;
+        }
+
+        .steering-btn svg {
+            width: 90%;
+            height: 90%;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+        }
+
+        .control-label {
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00f2fe;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 10px rgba(0, 242, 254, 0.4);
+        }
+
+        /* THE PENDULUM STAGE & PANELS */
+        .pendulum-stage {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            /* Height increased slightly to accommodate the lowered active panel */
+            height: 540px; 
+            z-index: 5;
+        }
+
+        .panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            animation: fadeInUp 1s ease-out backwards;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            
+            /* The physical pivot hinge */
+            transform-origin: 50% -10%; 
+            
+            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s, 
+                        filter 0.9s ease 0.4s, 
+                        opacity 0.9s ease 0.4s;
         }
 
-        /* Staggered entry animations */
-        .section:nth-child(1) { animation-delay: 0.2s; }
-        .section:nth-child(2) { animation-delay: 0.4s; }
+        .draw-panel{
+            padding: 2.5rem 2rem;
+            height: 105%;
+        }
 
-        .section:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+        .upload-panel{
+            padding: 2.5rem 2rem;
+            height: 80%;
         }
 
         h2 {
             margin-bottom: 1.5rem;
             font-weight: 600;
-            color: #00f2fe; /* Neon blue accent */
-            letter-spacing: 1px;
+            color: #00f2fe;
             text-transform: uppercase;
             font-size: 1.3rem;
         }
@@ -84,49 +136,31 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
             cursor: crosshair;
             margin-bottom: 1.5rem;
-            /* Subtle glowing border */
             border: 2px solid rgba(255, 255, 255, 0.15);
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        canvas:hover {
-            border-color: #4facfe;
-            box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
-        }
+        .btn-group { display: flex; gap: 1rem; width: 100%; }
 
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        button {
+        .action-btn {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             border: none;
             border-radius: 50px;
-            padding: 12px 28px;
+            padding: 10px 24px;
             color: #1a1a1a;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            flex: 1;
         }
 
-        button:hover {
-            transform: translateY(-3px);
+        .action-btn:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5);
             color: #fff;
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
-        /* Custom File Upload Styling */
         input[type="file"] {
             background: rgba(255, 255, 255, 0.05);
             padding: 12px;
@@ -134,13 +168,8 @@
             border: 1px dashed rgba(255, 255, 255, 0.4);
             color: #fff;
             width: 100%;
-            margin-bottom: 1.5rem;
+            margin: 2rem 0;
             cursor: pointer;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="file"]:hover {
-            border-color: #00f2fe;
         }
 
         input[type="file"]::file-selector-button {
@@ -152,93 +181,148 @@
             margin-right: 15px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
         }
 
-        input[type="file"]::file-selector-button:hover {
-            background: #00f2fe;
-            color: #1a1a1a;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-        }
-
-        /* Result Text Styling */
         .result-text {
-            margin-top: 1.5rem;
-            font-size: 1.2rem;
-            font-weight: 400;
+            margin-top: 1.0rem;
+            font-size: 1.1rem;
             color: #e0f7fa;
-            min-height: 2em;
-            animation: fadeIn 0.5s ease-in;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
         }
 
-        .result-highlight {
-            color: #00f2fe;
-            font-weight: 600;
-            font-size: 1.5rem;
+        .result-highlight { color: #00f2fe; font-weight: 600; font-size: 1.4rem; }
+
+        /* =========================================
+           STATE 1: DRAW MODE
+           ========================================= */
+        body.mode-draw .steering-btn {
+            transform: rotate(120deg); 
+        }
+        
+        body.mode-draw .draw-panel {
+            /* LOWERED ACTIVE PANEL: Added translateY(12%) to push it down */
+            transform: rotate(0deg) scale(1) translateX(0%) translateY(12%); 
+            filter: grayscale(0%) blur(0px);
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        
+        body.mode-draw .upload-panel {
+            /* RAISED DISABLED PANEL: Negative translateX pulls it up in 90deg space */
+            transform: rotate(90deg) scale(0.75) translateX(-15%) translateY(65%); 
+            filter: grayscale(100%) blur(2px); 
+            opacity: 0.6;
+            z-index: 1;
+            pointer-events: none; 
         }
 
-        /* Keyframe Animations */
+        /* =========================================
+           STATE 2: UPLOAD MODE
+           ========================================= */
+        body.mode-upload .steering-btn {
+            transform: rotate(0deg); 
+        }
+
+        body.mode-upload .draw-panel {
+            /* RAISED DISABLED PANEL: Positive translateX pulls it up in -90deg space */
+            transform: rotate(-90deg) scale(0.75) translateX(0%) translateY(45%); 
+            filter: grayscale(100%) blur(2px); 
+            opacity: 0.6;
+            z-index: 1;
+            pointer-events: none; 
+        }
+
+        body.mode-upload .upload-panel {
+            /* LOWERED ACTIVE PANEL: Added translateY(12%) to push it down */
+            transform: rotate(0deg) scale(1) translateX(0%) translateY(25%); 
+            filter: grayscale(0%) blur(0px);
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
     </style>
 </head>
-<body>
+<body class="{% if upload_digit is defined %}mode-upload{% else %}mode-draw{% endif %}" id="appBody">
 
-    <h1>Handwritten Digit Recognition</h1>
+    <h1>Digit Recognition</h1>
 
-    <div class="container">
-        <div class="section">
+    <div class="controls">
+        <button class="steering-btn" onclick="togglePendulum()" title="Steer to Switch Mode">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#222" stroke-width="6" />
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#555" stroke-width="2" />
+                <path d="M50 50 L50 90" stroke="#777" stroke-width="12" stroke-linecap="round"/>
+                <path d="M50 50 L12 35" stroke="#777" stroke-width="12" stroke-linecap="round"/>
+                <path d="M50 50 L88 35" stroke="#777" stroke-width="12" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="16" fill="#333" stroke="#111" stroke-width="3" />
+                <circle cx="50" cy="50" r="10" fill="#222" />
+            </svg>
+        </button>
+        <div class="control-label" id="modeLabel">
+            {% if upload_digit is defined %}Upload Mode{% else %}Draw Mode{% endif %}
+        </div>
+    </div>
+
+    <div class="pendulum-stage">
+        
+        <div class="panel draw-panel">
             <h2>Draw Digit</h2>
-            <canvas id="canvas" width="280" height="280"></canvas><br>
+            <canvas id="canvas" width="280" height="280"></canvas>
             
             <div class="btn-group">
-                <button onclick="clearCanvas()">Clear</button>
-                <button onclick="predictCanvas()">Predict</button>
+                <button class="action-btn" onclick="clearCanvas()">Clear</button>
+                <button class="action-btn" onclick="predictCanvas()">Predict</button>
             </div>
 
-            <h3 id="canvasResult" class="result-text"></h3>
+            <div id="canvasResult" class="result-text" style="display: none;"></div>
         </div>
 
-        <div class="section">
+        <div class="panel upload-panel">
             <h2>Upload Image</h2>
-            <form action="/predict_upload" method="POST" enctype="multipart/form-data">
+            <form action="/predict_upload" method="POST" enctype="multipart/form-data" style="width: 100%;">
                 <input type="file" name="file" required>
-                <br>
-                <button type="submit">Predict</button>
+                <button type="submit" class="action-btn" style="width: 100%;">Analyze File</button>
             </form>
 
             {% if upload_digit is defined %}
-                <div class="result-text">
+                <div class="result-text" style="display: block; margin-top: 2rem;">
                     Prediction: <span class="result-highlight">{{ upload_digit }}</span><br>
                     Confidence: <span class="result-highlight">{{ upload_confidence }}%</span>
                 </div>
             {% endif %}
         </div>
+
     </div>
 
     <script>
+        function togglePendulum() {
+            const body = document.getElementById('appBody');
+            const modeLabel = document.getElementById('modeLabel');
+
+            if (body.classList.contains('mode-draw')) {
+                body.classList.remove('mode-draw');
+                body.classList.add('mode-upload');
+                setTimeout(() => modeLabel.innerText = "Upload Mode", 400);
+            } else {
+                body.classList.remove('mode-upload');
+                body.classList.add('mode-draw');
+                setTimeout(() => modeLabel.innerText = "Draw Mode", 400);
+            }
+        }
+
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
 
-        // Set initial black background for the model
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -250,40 +334,40 @@
 
         function draw(e) {
             if (!drawing) return;
-
             ctx.fillStyle = "white";
             ctx.beginPath();
-            ctx.arc(e.offsetX, e.offsetY, 10, 0, Math.PI * 2);
+            ctx.arc(e.offsetX, e.offsetY, 12, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function clearCanvas() {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            document.getElementById("canvasResult").innerHTML = "";
+            const resultBox = document.getElementById("canvasResult");
+            resultBox.style.display = "none";
+            resultBox.innerHTML = "";
         }
 
         function predictCanvas() {
             const dataURL = canvas.toDataURL("image/png");
-
-            // Adding a temporary "Predicting..." animation state
-            document.getElementById("canvasResult").innerHTML = "<span style='opacity: 0.7;'>Analyzing...</span>";
+            const resultBox = document.getElementById("canvasResult");
+            
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "<span style='opacity: 0.7;'>Analyzing...</span>";
 
             fetch("/predict_canvas", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ image: dataURL })
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("canvasResult").innerHTML =
+                resultBox.innerHTML =
                     "Prediction: <span class='result-highlight'>" + data.digit + "</span><br>" +
                     "Confidence: <span class='result-highlight'>" + data.confidence + "%</span>";
             })
             .catch(err => {
-                document.getElementById("canvasResult").innerText = "Error making prediction.";
+                resultBox.innerHTML = "Error making prediction.";
             });
         }
     </script>
